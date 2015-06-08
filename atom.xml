@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://musicpop.github.io/atom.xml" rel="self"/>
   <link href="http://musicpop.github.io/"/>
-  <updated>2015-06-08T11:30:35+08:00</updated>
+  <updated>2015-06-08T12:08:58+08:00</updated>
   <id>http://musicpop.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,6 +12,16 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spring-boot]]></title>
+    <link href="http://musicpop.github.io/blog/2015/06/08/spring-boot/"/>
+    <updated>2015-06-08T12:00:38+08:00</updated>
+    <id>http://musicpop.github.io/blog/2015/06/08/spring-boot</id>
+    <content type="html"><![CDATA[<p>Spring Boot用来创建独立的Java应用程序，并接可以用java -jar命令运行，也可创建传统的WAR文件。由于Spring使用了大量的XML配置文件以及复杂的依赖管理，这一点饱受非议。而Spring Boot充分利用了JavaConfig的配置模式以及“约定优于配置”的理念，能够极大的简化基于Spring MVC的Web应用和REST服务的开发。 Spring Boot 简化了部署的过程，其内嵌了Tomcat和Jety。 使用gradle和maven构建 使用时只需将org.springframework.boot设置为父项目 *如果想生成War包，并部署到外部容器，
+参考<a href="http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#build-tool-plugins-maven-packaging">http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#build-tool-plugins-maven-packaging</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[软件系统架构读书笔记]]></title>
