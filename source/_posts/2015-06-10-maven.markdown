@@ -1,0 +1,24 @@
+---
+layout: post
+title: "Maven"
+date: 2015-06-10 08:32:11 +0800
+comments: true
+categories: 
+---
+Maven笔记：
+一，  主要命令
+a)  Mvn clean compile 
+b)  Mvn clean test
+c)  Mvn clean package 
+d)  Mvn clean install
+执行test前会执行compile，执行package前会执行test，执行install前会执行package
+二，  安装时compiler can not be resolved
+因为公司里使用代理上网，配置maven的conf\setting添加
+<proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>proxy1.sg.*.com</host>
+      <port>81</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy>
