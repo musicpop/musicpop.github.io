@@ -9,7 +9,13 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="Spring Boot用来创建独立的Java应用程序，并接可以用java -jar命令运行，也可创建传统的WAR文件。由于Spring使用了大量的XML配置文件以及复杂的依赖管理，这一点饱受非议。而Spring Boot充分利用了JavaConfig的配置模式以及“约定优于配置”的理念， &hellip;">
+  <meta name="description" content="如何在Idea14中显示行号 Idea常用快捷键汇总 找文件找代码找引用相关 双击shift 在项目的所有目录查找
+ctrl+f 当前文件查找特定内容
+ctrl+shift+f find in path
+ctrl+n 查找类
+ctrl+shift+n 查找文件
+ctrl+e 最近的文件
+alt+ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -27,8 +33,6 @@
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
 
@@ -65,6 +69,116 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/08/18/idea-14-show-column-number-shortcutkey/">Idea-14-show-column-number-shortcutkey</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-08-18T08:17:17+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:17 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>如何在Idea14中显示行号</h1>
+
+<p><img src="images/column-number.png" alt="显示行号" /></p>
+
+<h1>Idea常用快捷键汇总</h1>
+
+<h2>找文件找代码找引用相关</h2>
+
+<ol>
+<li>双击shift   在项目的所有目录查找</li>
+<li>ctrl+f    当前文件查找特定内容</li>
+<li>ctrl+shift+f  find in path</li>
+<li>ctrl+n    查找类</li>
+<li>ctrl+shift+n 查找文件</li>
+<li>ctrl+e 最近的文件</li>
+<li><p>alt+F7
+可以帮你找到你的函数或者变量或者类的所有引用到的地方</p>
+
+<h2>编辑相关</h2></li>
+<li><p>shift+enter 另起一行</p></li>
+<li><p>ctrl+r 当前文件替换特定内容</p></li>
+<li><p>ctrl+shift+r 当前项目替换特定内容</p></li>
+<li><p>shift+F6 可以重命名你的类、方法、变量等等，而且这个重命名甚至可以选择替换掉注释中的内容</p></li>
+<li><p>ctrl+d 复制当前行到下一行</p></li>
+<li><p>ctrl+x 剪切当前行</p></li>
+<li><p>ctrl+c \ ctrl+v 大家都懂的</p></li>
+<li><p>ctrl+z 撤销</p></li>
+<li><p>ctrl+shift+z 取消撤销</p></li>
+<li><p>ctrl+k 提交代码到SVN</p></li>
+<li><p>ctrl+t 更新代码</p></li>
+<li><p>alt+insert
+在类中使用：可以自动生成构造器、getter/setter等等常用方法
+  在项目目录上使用：可用于新建各种文件。</p></li>
+<li>ctrl+alt+L
+  自动格式化代码，我已经养成了写完代码就来一发的习惯。</li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/06/10/maven/">Maven</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-06-10T08:32:11+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:32 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Maven笔记：
+一，  主要命令
+a)  Mvn clean compile
+b)  Mvn clean test
+c)  Mvn clean package
+d)  Mvn clean install
+执行test前会执行compile，执行package前会执行test，执行install前会执行package
+二，  安装时compiler can not be resolved
+因为公司里使用代理上网，配置maven的conf\setting添加
+<proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>proxy1.sg.*.com</host>
+      <port>81</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -383,6 +497,14 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/08/18/idea-14-show-column-number-shortcutkey/">Idea-14-show-column-number-shortcutkey</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/06/10/maven/">Maven</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/06/08/spring-boot/">Spring-boot</a>
       </li>
     
@@ -392,14 +514,6 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
     
       <li class="post">
         <a href="/blog/2014/09/17/gen-ju-duan-kou-hao-cha-zhao-jin-cheng/">根据端口号查找进程</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/17/gcc-and-make/">GCC and Make</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/15/my-first-octopress-blog/">第一篇博客</a>
       </li>
     
   </ul>

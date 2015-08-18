@@ -5,12 +5,17 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Title - My Octopress Blog</title>
+  <title>Maven - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="
-">
+  <meta name="description" content="Maven笔记：
+一， 主要命令
+a) Mvn clean compile
+b) Mvn clean test
+c) Mvn clean package
+d) Mvn clean install
+执行test前会执行compile，执行package前会执行test， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +24,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://musicpop.github.io/blog/2014/09/13/title">
+  <link rel="canonical" href="http://musicpop.github.io/blog/2015/06/10/maven">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -67,7 +72,7 @@
   
   <header>
     
-      <h1 class="entry-title">Title</h1>
+      <h1 class="entry-title">Maven</h1>
     
     
       <p class="meta">
@@ -76,14 +81,30 @@
 
 
 
-<time class='entry-date' datetime='2014-09-13T02:38:39+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:38 am</span></time>
+<time class='entry-date' datetime='2015-06-10T08:32:11+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:32 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content">
+<div class="entry-content"><p>Maven笔记：
+一，  主要命令
+a)  Mvn clean compile
+b)  Mvn clean test
+c)  Mvn clean package
+d)  Mvn clean install
+执行test前会执行compile，执行package前会执行test，执行install前会执行package
+二，  安装时compiler can not be resolved
+因为公司里使用代理上网，配置maven的conf\setting添加
+<proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>proxy1.sg.*.com</host>
+      <port>81</port>
+      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
+    </proxy></p>
 </div>
 
 
@@ -99,7 +120,7 @@
 
 
 
-<time class='entry-date' datetime='2014-09-13T02:38:39+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:38 am</span></time>
+<time class='entry-date' datetime='2015-06-10T08:32:11+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:32 am</span></time>
       
 
 
@@ -114,8 +135,10 @@
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2015/06/08/spring-boot/" title="Previous Post: spring-boot">&laquo; spring-boot</a>
       
-        <a class="basic-alignment right" href="/blog/2014/09/15/my-first-octopress-blog/" title="Next Post: 第一篇博客">第一篇博客 &raquo;</a>
+      
+        <a class="basic-alignment right" href="/blog/2015/08/18/idea-14-show-column-number-shortcutkey/" title="Next Post: idea-14-show-column-number-shortcutkey">idea-14-show-column-number-shortcutkey &raquo;</a>
       
     </p>
   </footer>
