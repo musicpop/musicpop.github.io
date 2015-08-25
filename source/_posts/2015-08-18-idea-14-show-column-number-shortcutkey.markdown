@@ -6,7 +6,7 @@ comments: true
 categories: 
 ---
 #如何在Idea14中显示行号
-![显示行号](images/column-number.png) 
+![显示行号](images/column-number.png)
 #Idea常用快捷键汇总
 ##找文件找代码找引用相关
 1. 双击shift   在项目的所有目录查找
