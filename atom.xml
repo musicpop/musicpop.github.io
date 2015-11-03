@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://musicpop.github.io/atom.xml" rel="self"/>
   <link href="http://musicpop.github.io/"/>
-  <updated>2015-10-13T14:21:32+08:00</updated>
+  <updated>2015-11-03T11:29:32+08:00</updated>
   <id>http://musicpop.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -27,42 +27,43 @@
 
 <h3>基本的语法是：</h3>
 
-<p>`grep pattern filename(或者grep &ldquo;pattern&rdquo; filename)</p>
+<pre><code>grep pattern filename(或者grep "pattern" filename)
+this is the line containing pattern
+</code></pre>
 
-<p>this is the line containing pattern `
-grep后可以加一些常用的选项，包括：
--c：只输出匹配行的计数。
--I：不区分大小写(只适用于单字符)。
--h：查询多文件时不显示文件名。
--l：查询多文件时只输出包含匹配字符的文件名。
--n：显示匹配行及行号。
--s：不显示不存在或无匹配文本的错误信息。
--v：显示不包含匹配文本的所有行。</p>
+<p>grep后可以加一些常用的选项，包括:</p>
+
+<ul>
+<li>-c：只输出匹配行的计数。</li>
+<li>-I：不区分大小写(只适用于单字符)。</li>
+<li>-h：查询多文件时不显示文件名。</li>
+<li>-l：查询多文件时只输出包含匹配字符的文件名。</li>
+<li>-n：显示匹配行及行号。</li>
+<li>-s：不显示不存在或无匹配文本的错误信息。</li>
+<li>-v：显示不包含匹配文本的所有行。</li>
+</ul>
+
 
 <h3>grep 与grep -E（也就是egrep）的区别：</h3>
 
 <p>例1，grep命令也可以使用正则表达式来做字符串的匹配，
 但需要加转义字符。
-为了查找多个字符，可以使用命令：
- `[root@devops ~]# grep &lsquo;user1|user2|user3&rsquo; /etc/passwd</p>
+为了查找多个字符，可以使用命令：</p>
 
-<p>user1:x:501:501::/home/user1:/bin/bash</p>
+<pre><code> [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
+user1:x:501:501::/home/user1:/bin/bash
+user1add:x:503:503::/home/user1add:/bin/bash
+user2:x:504:504::/home/user2:/bin/bash
+user3:x:505:505::/home/user3:/bin/bash
+</code></pre>
 
-<p>user1add:x:503:503::/home/user1add:/bin/bash</p>
+<p>例2，grep命令的扩展版本egrep，带有更复杂的正则表达式元字符，对于以上例子，如果使用egrep，那么可以省略转义字符，如下：</p>
 
-<p>user2:x:504:504::/home/user2:/bin/bash</p>
-
-<p>user3:x:505:505::/home/user3:/bin/bash</p>
-
-<p><code>
-例2，grep命令的扩展版本egrep，带有更复杂的正则表达式元字符，对于以上例子，如果使用egrep，那么可以省略转义字符，如下：
-</code>[root@devops ~]# egrep &lsquo;user1|user2|user3&rsquo; /etc/passwd</p>
-
-<p>user1:x:501:501::/home/user1:/bin/bash</p>
-
-<p>user2:x:504:504::/home/user2:/bin/bash</p>
-
-<p>user3:x:505:505::/home/user3:/bin/bash`</p>
+<pre><code>[root@devops ~]# egrep 'user1|user2|user3' /etc/passwd
+user1:x:501:501::/home/user1:/bin/bash
+user2:x:504:504::/home/user2:/bin/bash
+user3:x:505:505::/home/user3:/bin/bash
+</code></pre>
 
 <h3>grep还可以在多级目录中对文本进行递归搜索</h3>
 
@@ -70,26 +71,33 @@ grep后可以加一些常用的选项，包括：
 
 <h3>grep 搜索中指定(include)或排除(exclude)文件</h3>
 
-<p>目录中递归搜索所有的.c和.cpp文件
-<code>grep "main()" . -r --include *.{c,cpp}</code>
-在搜索中排除所有的README文件
-<code>grep "main()" . -r --exclude "README"</code>
-如果要排除目录，使用&ndash;exclude-dir选项</p>
+<p>目录中递归搜索所有的.c和.cpp文件</p>
 
-<h3>有时候，我们不打算查看匹配的字符串，而只是想知道是否</h3>
+<p><code>grep "main()" . -r --include *.{c,cpp}</code></p>
 
-<p>能够成功匹配。可以使用grep的静默选项（-q）来实现，
-如果命令运行成功会返回0，如果失败则返回非0值
-#</p>
+<p>在搜索中排除所有的README文件</p>
+
+<p><code>grep "main()" . -r --exclude "README"</code></p>
+
+<p>如果要排除目录，使用&ndash;exclude-dir选项</p>
+
+<h3>有时候，我们不打算查看匹配的字符串，而只是想知道是否能够成功匹配。</h3>
+
+<p>可以使用grep的静默选项（-q）来实现，
+如果命令运行成功会返回0，如果失败则返回非0值</p>
 
 <h2>find命令</h2>
 
 <p>工作原理：沿着文件层次结构向下遍历，匹配符合条件的文件。
-执行相应的操作。例如，列出base_path目录下的所有文件和文件夹：
-<code>find base_path</code>
-再例如：
-<code>find . -print</code>
--print指明打印匹配文件的文件名时，&#8217;\n&#8217;对输出的文件名进行分隔。
+执行相应的操作。例如，列出base_path目录下的所有文件和文件夹：</p>
+
+<p><code>find base_path</code></p>
+
+<p>再例如：</p>
+
+<p><code>find . -print</code></p>
+
+<p>-print指明打印匹配文件的文件名时，&#8217;\n&#8217;对输出的文件名进行分隔。
 -print0指明使用&#8217;\0&#8217;作为匹配的文件名之间的分隔符，也就是不换行。</p>
 
 <h3>根据文件名进行搜索</h3>
@@ -104,14 +112,17 @@ grep后可以加一些常用的选项，包括：
 
 <p>大多数情况下，我们只需要在当前目录下搜索，无需再继续向下搜索。
 这时使用深度选项来限制。深度设置为1表示在当前目录下查找，以此类推。
-使用-maxdepth指定最大深度，使用-mindepth指定最小深度。
-例如：
-<code>find . -maxdepth 1 -name "f*"　-print</code></p>
+使用-maxdepth指定最大深度，使用-mindepth指定最小深度。</p>
+
+<p>例如：</p>
+
+<p><code>find . -maxdepth 1 -name "f*"　-print</code></p>
 
 <h3>根据文件类型进行搜索</h3>
 
-<p><code>find . -type d -pring</code>
-其中：普通文件的类型为f
+<p><code>find . -type d -pring</code></p>
+
+<p>其中：普通文件的类型为f
       符合链接的类型为l
       目录的类型为    d
       字符设备的类型为c
@@ -121,76 +132,92 @@ grep后可以加一些常用的选项，包括：
 
 <h3>根据文件时间进行搜索</h3>
 
-<p>Linux文件系统中的文件都有三种时间戳：
-* 1 访问时间（）：用户最近一次访问文件的时间
-* 2 修改时间（）：文件内容最后一次被修改的时间
-* 3 变化时间（）：文件元数据（）最后一次改变的时间
-例如：打印出访问时间超所7天的所有文件
-<code>find . -type f -atime +7 -print</code>
-其中指定-atime选项时，单位是天，参数值带有-表示小于，+表示大于，不带有符合表示当天。</p>
+<p>Linux文件系统中的文件都有三种时间戳：</p>
+
+<ul>
+<li>1 访问时间（）：用户最近一次访问文件的时间</li>
+<li>2 修改时间（）：文件内容最后一次被修改的时间</li>
+<li>3 变化时间（）：文件元数据（）最后一次改变的时间</li>
+<li><p>例如：打印出访问时间超所7天的所有文件</p></li>
+</ul>
+
+
+<p><code>find . -type f -atime +7 -print</code></p>
+
+<p>其中指定-atime选项时，单位是天，参数值带有-表示小于，+表示大于，不带有符合表示当天。</p>
 
 <h3>根据文件大小的搜索</h3>
 
-<p>使用-size选项：
-<code>find . -type f -size +2k</code></p>
+<p>使用-size选项：</p>
+
+<p><code>find . -type f -size +2k</code></p>
 
 <h3>删除匹配的文件</h3>
 
-<p>-delete可以用来删除查找到的文件
-<code>find . -type f -name "*.swap" -delete</code></p>
+<p>-delete可以用来删除查找到的文件</p>
+
+<p><code>find . -type f -name "*.swap" -delete</code></p>
 
 <h3>基于文件权限和所有权进行匹配</h3>
 
-<p>-perm 匹配特定的权限值
-<code>find -type f -name "*.java" ! -perm 644</code>
-上面的例子，找出没有设置好权限的文件
--user 选项找出特定用户所拥有的文件
-<code>find . -type f -user peng -print</code></p>
+<p>-perm 匹配特定的权限值</p>
+
+<p><code>find -type f -name "*.java" ! -perm 644</code></p>
+
+<p>上面的例子，找出没有设置好权限的文件-user 选项找出特定用户所拥有的文件</p>
+
+<p><code>find . -type f -user peng -print</code></p>
 
 <h3>find与-exec结合</h3>
 
-<p>我们查找出来的内容，不只是看一下而已，还会有进一步的操作，这时候
--exec的作用就体现出来了。
--exec 后面只能接受单个命令，{}表示查找出的文件名。以<code>;</code>结束，为了
-考虑各个系统<code>;</code>会有不同的意义,所以在前面加反斜杠。例如：
-<code>find . -type f -name "*.txt" -exec printf "Text file: %s\n" {} \;</code>
-如果后面要接多个参数，可以把多个命令写到一个shell脚本中。例如：
-<code>-exec ./command.sh {} \;</code></p>
+<p>我们查找出来的内容，不只是看一下而已，还会有进一步的操作，这时候-exec的作用就体现出来了。-exec 后面只能接受单个命令，{}表示查找出的文件名。以<code>;</code>结束，为了考虑各个系统<code>;</code>会有不同的意义,所以在前面加反斜杠。例如：</p>
+
+<p><code>find . -type f -name "*.txt" -exec printf "Text file: %s\n" {} \;</code></p>
+
+<p>如果后面要接多个参数，可以把多个命令写到一个shell脚本中。例如：</p>
+
+<p><code>-exec ./command.sh {} \;</code></p>
 
 <h3>find排除目录及文件</h3>
 
 <p>-prune 选项，就表示，不寻找字符串作为寻找文件或目录的范本样式。
 例如：</p>
 
-<p><code>ls -l</code></p>
+<pre><code>ls -l
 
-<p><code>total 4</code></p>
+total 4
 
-<p><code>drwxrwxr-x. 2 peng peng 4096 Oct 12 17:10 fold1</code></p>
+drwxrwxr-x. 2 peng peng 4096 Oct 12 17:10 fold1
 
-<p><code>-rw-rw-r--. 1 peng peng    0 Oct 12 16:34 t1.txt</code></p>
+`-rw-rw-r--. 1 peng peng    0 Oct 12 16:34 t1.txt
 
-<p><code>-rw-rw-r--. 1 peng peng    0 Oct 12 16:35 t2.txt</code></p>
+`-rw-rw-r--. 1 peng peng    0 Oct 12 16:35 t2.txt
 
-<p><code>-rw-rw-r--. 1 peng peng    0 Oct 12 17:10 test.git</code></p>
+`-rw-rw-r--. 1 peng peng    0 Oct 12 17:10 test.git
 
-<p>[<code>peng@localhost learn]$ find . -path "./fold1"</code>
-.<code>/fold1</code></p>
+[peng@localhost learn]$ find . -path "./fold1"
+/fold1
 
-<p>[<code>peng@localhost learn]$ find . -path "./fold1" -prune</code>
-./fold1`</p>
+[`peng@localhost learn]$ find . -path "./fold1" -prune`
+./fold1`
+</code></pre>
 
-<p>find . -path &ldquo;./fold1&rdquo; 是基本的查询命令。
--prone就像一个判断语句,当发现-prune前面的表达式math时，返回真。
-<code>[peng@localhost learn]$ find . -path "./fold1" -prune -o -print</code>
+<p>find . -path &ldquo;./fold1&rdquo; 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式math时，返回真。</p>
+
+<p><code>[peng@localhost learn]$ find . -path "./fold1" -prune -o -print</code>
 <code>.</code>
 <code>./t1.txt</code>
 <code>./t2.txt</code>
-<code>./test.git</code>
-当使用-o选项，表示逻辑或。如果其前返回真，则不执行后面的-print
-如果其前返回假，则会执行-print并输出不包含./fold1的目录。
-注意：-a 应该是and的缩写，意思是逻辑运算符‘或’(&amp;&amp;); -o应该是or的缩写,意思是逻辑运算符‘与’(||), -not 表示非.
+<code>./test.git</code></p>
+
+<p>当使用-o选项，表示逻辑或。如果其前返回真，则不执行后面的-print</p>
+
+<p>如果其前返回假，则会执行-print并输出不包含./fold1的目录。</p>
+
+<p>注意：-a 应该是and的缩写，意思是逻辑运算符‘或’(&amp;&amp;); -o应该是or的缩写,意思是逻辑运算符‘与’(||), -not 表示非.
 比较下面的代码：</p>
+
+<p>默默地</p>
 
 <p><code>[peng@localhost learn]$ find . -path "./fold1" -prune -a -print</code></p>
 
@@ -199,13 +226,16 @@ grep后可以加一些常用的选项，包括：
 <h2>xargs命令</h2>
 
 <p>为什么要使用xargs命令呢？我们可以使用管道将一个命令的stdout
-重定向到另一个命令。例如
-<code>cat foo.txt | grep "test"</code>
-但是有些命令只能使用命令的参数接受数据，而无法通过stdin接收数据流。
+重定向到另一个命令。例如</p>
+
+<p><code>cat foo.txt | grep "test"</code></p>
+
+<p>但是有些命令只能使用命令的参数接受数据，而无法通过stdin接收数据流。
 那么，我们就设法用管道提供那些只有命令行参数需要的数据。
 xargs命令将标准输入数据转换成命令行参数。
-基本的语法是：
-<code>command | xargs</code></p>
+基本的语法是：</p>
+
+<p><code>command | xargs</code></p>
 
 <h3>第一步把stdin接收的数据重新格式化</h3>
 
