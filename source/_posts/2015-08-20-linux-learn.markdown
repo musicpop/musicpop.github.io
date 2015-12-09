@@ -30,11 +30,11 @@ grep后可以加一些常用的选项，包括:
 但需要加转义字符。
 为了查找多个字符，可以使用命令：
 
-	 [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
-	user1:x:501:501::/home/user1:/bin/bash
-	user1add:x:503:503::/home/user1add:/bin/bash
-	user2:x:504:504::/home/user2:/bin/bash
-	user3:x:505:505::/home/user3:/bin/bash
+		 [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
+		user1:x:501:501::/home/user1:/bin/bash
+		user1add:x:503:503::/home/user1add:/bin/bash
+		user2:x:504:504::/home/user2:/bin/bash
+		user3:x:505:505::/home/user3:/bin/bash
 
 例2，grep命令的扩展版本egrep，带有更复杂的正则表达式元字符，对于以上例子，如果使用egrep，那么可以省略转义字符，如下：
 
@@ -167,7 +167,7 @@ Linux文件系统中的文件都有三种时间戳：
 	[`peng@localhost learn]$ find . -path "./fold1" -prune`
 	./fold1`
  
-find . -path "./fold1" 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式math时，返回真。
+find . -path "./fold1" 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式match时，返回真。
 
 `[peng@localhost learn]$ find . -path "./fold1" -prune -o -print`
 `.`
