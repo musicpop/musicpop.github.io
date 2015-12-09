@@ -4,7 +4,7 @@
   <title><![CDATA[My Octopress Blog]]></title>
   <link href="http://musicpop.github.io/atom.xml" rel="self"/>
   <link href="http://musicpop.github.io/"/>
-  <updated>2015-11-03T11:29:32+08:00</updated>
+  <updated>2015-12-09T19:25:02+08:00</updated>
   <id>http://musicpop.github.io/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
@@ -12,6 +12,106 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Vertica 1]]></title>
+    <link href="http://musicpop.github.io/blog/2015/12/09/vertica-1/"/>
+    <updated>2015-12-09T15:19:40+08:00</updated>
+    <id>http://musicpop.github.io/blog/2015/12/09/vertica-1</id>
+    <content type="html"><![CDATA[<h1>Vertica 大数据</h1>
+
+<h1>列式存储</h1>
+
+<p>HP Vertica 存储数据的方式极大的提升了查询的效能。因为它可以极大地减少磁盘i/o ，列存储是读密集型工作负载的理想选择。
+<img src="images/columnStore.png" alt="列存储" /></p>
+
+<h3>列存储架构中的 FlexStore</h3>
+
+<p>传统数据库被用来 OLTP查询和行存储架构.为了处理一个查询, 行存储区读取指定的表中的所有列, 无论表有多宽或实际上需要多少的列。通常情况下，包含几百列的表解析查询访问只有两列或三列，会导致很多不必要的数据检索。</p>
+
+<p>不像其他 RDBMS 系统, HP Vertica 从数据库对象中读取列，这个对象就是 projections, 在 Physical Schema 中详解. 没有资源被浪费在读取大量的未使用的列。执行引擎使用每个字节的数据。例如，请考虑如下两个表架构：</p>
+
+<p><img src="images/column-2.png" alt="列存储" /></p>
+
+<p>比如你需要执行如下语句:</p>
+
+<pre><code>SELECT A, C, N  
+FROM Table1 JOIN Table2 ON H = J;
+</code></pre>
+
+<p>对于在结果集中的每一行，行式存储读取 16 列 (A 到 H 和 J 到 Q)物理数据. 使用列式存储，使用一个查询projection只需要读取三列数据: A, C, and N.</p>
+
+<h1>数据编码和压缩</h1>
+
+<p>HP Vertica使用编码和压缩，以优化查询性能和节省存储空间。 然而，在您的HP Vertica数据库，他们有不同的含义。</p>
+
+<h2>编码</h2>
+
+<p>编码是数据转换成标准格式的过程. HP Vertica 使用大量不同的编码策略，具体取决于列的数据类型、 表基数和排序顺序。编码提高了性能，因为在查询执行过程中有更少的磁盘 I/O。此外，您可以在较少的空间存储更多数据。</p>
+
+<h2>压缩</h2>
+
+<p>压缩是将数据转换为一个紧凑的格式的过程。HP Vertica 使用几种不同的压缩方法和自动选择  最好的一个被压缩的数据。</p>
+
+<p>使用压缩，HP Vertica 存储更多数据，提供更多的视图，并比其他数据库使用更少的硬件。 50-90%的压缩率是可能的。使用压缩，可以更多的物理存储历史数据。</p>
+
+<p>数据库的大小，常常受到存储资源的可用性。通常情况下，当数据库超过了其大小限制，管理员对超过一个特定的历史阈值的数据 进 存档。</p>
+
+<p>广泛使用压缩允许列存储占用大幅较少的存储. 在列式存储中, 每一个保存在列projection 中的数据有相同的数据类型. 这样特别利于压缩,特别是在排好序的列中, 行存储中每一行有不同的数据类型, 这导致在使用压缩时的低效。</p>
+
+<p><img src="images/yasuo.png" alt="压缩" /></p>
+
+<h1>集群</h1>
+
+<p>集群用于扩展性和冗余性. 你可以通过添加更多的硬件，很容易扩展数据库群集，并通过在集群间分布和复制数据提高数据库的可用性。</p>
+
+<p><img src="images/jiqun1.png" alt="压缩" />
+在集群中数据（特别是列示数据）被分配在不同的节点中, 所以如果一个节点不可用，数据库可以继续运行. 当一个节点添加到群集，或变得不可用后重新联机时，它自动查询来更新其本地数据的其他节点</p>
+
+<p>In HP Vertica, 物理架构旨在使用分布物理存储，对需要计算资源，允许并行查询执行.</p>
+
+<p>最重要的概念是理解 host, instance, node, cluster, and database:</p>
+
+<p>Host —</p>
+
+<p>计算机系统与 32 位 (仅适用于非生产使用) 或 64 位英特尔或 AMD 的处理器、RAM、 硬盘和 TCP/IP 网络接口 (IP 地址和主机名). 主机之间彼此不分享磁盘空间和主内存.</p>
+
+<p>Instance —</p>
+
+<p>一个 HP Vertica 实例 由如下组成： 运行 HP Vertica 进程 和磁盘存储(catalog and data). 一个主机只能安装一个实例.</p>
+
+<p>Node —</p>
+
+<p>A host 配置后运行起来 HP Vertica. 它就成为集群的一员. 为了有能力从一个节点故障恢复数据库，至少需要三个节点. HP建议你使用最小的四个节点.</p>
+
+<p>Cluster —</p>
+
+<p>数据库由多个节点的集合组成. 集群不属于数据库定义的一部分，也没有名字.</p>
+
+<p>Database —</p>
+
+<p>多个节点集群形成的数据库, 当启动时, 可以执行分布式的数据存储和 SQL 语句的执行，通过管理员界面、 交互和编程的用户界面.</p>
+
+<h1>持续的性能</h1>
+
+<p>HP Vertica 在没有数据管理的时候连续的（7*24）查询和加载数据。</p>
+
+<p><img src="images/jiqun2.png" alt="压缩" /></p>
+
+<p>自动数据复制、 故障转移和恢复提供积极的冗余，从而提高性能。节点通过查询系统自动恢复。</p>
+
+<h1>高可用性及数据恢复</h1>
+
+<h2>K-Safety</h2>
+
+<p>K-safety是数据库集群容错措施，示数据在数据库中的数据库群集中存在复制副本的数。这些副本允许其他节点接管失败节点, 允许的数据库继续运行，同时仍能确保数据的完整性. 如果数据库中超过K个节点失效, 数据库中的数据可能变为不可用. 在此情况下, 数据库被认为不安全，并自动关机.</p>
+
+<p>HP Vertica 数据库有可能在 超过K 节点失败的情况下运行. 因为每个数据段至少一个正常运行的群集节点上可用，数据库就能够运行。只要每个失败的节点上的数据从另一个活动节点可用，数据库会继续运行。</p>
+
+<p>K-Safety案例
+<img src="images/ksf1.png" alt="压缩" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Linux-learn]]></title>
@@ -50,11 +150,11 @@ this is the line containing pattern
 但需要加转义字符。
 为了查找多个字符，可以使用命令：</p>
 
-<pre><code> [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
-user1:x:501:501::/home/user1:/bin/bash
-user1add:x:503:503::/home/user1add:/bin/bash
-user2:x:504:504::/home/user2:/bin/bash
-user3:x:505:505::/home/user3:/bin/bash
+<pre><code>     [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
+    user1:x:501:501::/home/user1:/bin/bash
+    user1add:x:503:503::/home/user1add:/bin/bash
+    user2:x:504:504::/home/user2:/bin/bash
+    user3:x:505:505::/home/user3:/bin/bash
 </code></pre>
 
 <p>例2，grep命令的扩展版本egrep，带有更复杂的正则表达式元字符，对于以上例子，如果使用egrep，那么可以省略转义字符，如下：</p>
@@ -202,7 +302,7 @@ drwxrwxr-x. 2 peng peng 4096 Oct 12 17:10 fold1
 ./fold1`
 </code></pre>
 
-<p>find . -path &ldquo;./fold1&rdquo; 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式math时，返回真。</p>
+<p>find . -path &ldquo;./fold1&rdquo; 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式match时，返回真。</p>
 
 <p><code>[peng@localhost learn]$ find . -path "./fold1" -prune -o -print</code>
 <code>.</code>

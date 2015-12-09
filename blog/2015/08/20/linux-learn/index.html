@@ -116,11 +116,11 @@ this is the line containing pattern
 但需要加转义字符。
 为了查找多个字符，可以使用命令：</p>
 
-<pre><code> [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
-user1:x:501:501::/home/user1:/bin/bash
-user1add:x:503:503::/home/user1add:/bin/bash
-user2:x:504:504::/home/user2:/bin/bash
-user3:x:505:505::/home/user3:/bin/bash
+<pre><code>     [root@devops ~]# grep 'user1\|user2\|user3' /etc/passwd
+    user1:x:501:501::/home/user1:/bin/bash
+    user1add:x:503:503::/home/user1add:/bin/bash
+    user2:x:504:504::/home/user2:/bin/bash
+    user3:x:505:505::/home/user3:/bin/bash
 </code></pre>
 
 <p>例2，grep命令的扩展版本egrep，带有更复杂的正则表达式元字符，对于以上例子，如果使用egrep，那么可以省略转义字符，如下：</p>
@@ -268,7 +268,7 @@ drwxrwxr-x. 2 peng peng 4096 Oct 12 17:10 fold1
 ./fold1`
 </code></pre>
 
-<p>find . -path &ldquo;./fold1&rdquo; 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式math时，返回真。</p>
+<p>find . -path &ldquo;./fold1&rdquo; 是基本的查询命令。-prone就像一个判断语句,当发现-prune前面的表达式match时，返回真。</p>
 
 <p><code>[peng@localhost learn]$ find . -path "./fold1" -prune -o -print</code>
 <code>.</code>
@@ -339,6 +339,8 @@ xargs命令将标准输入数据转换成命令行参数。
         <a class="basic-alignment left" href="/blog/2015/08/18/idea-14-show-column-number-shortcutkey/" title="Previous Post: idea-14-show-column-number-shortcutkey">&laquo; idea-14-show-column-number-shortcutkey</a>
       
       
+        <a class="basic-alignment right" href="/blog/2015/12/09/vertica-1/" title="Next Post: Vertica 1">Vertica 1 &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -350,6 +352,10 @@ xargs命令将标准输入数据转换成命令行参数。
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/vertica-1/">Vertica 1</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/08/20/linux-learn/">Linux-learn</a>
@@ -365,10 +371,6 @@ xargs命令将标准输入数据转换成命令行参数。
     
       <li class="post">
         <a href="/blog/2015/06/08/spring-boot/">Spring-boot</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/11/03/ruan-jian-xi-tong-jia-gou-du-shu-bi-ji/">软件系统架构读书笔记</a>
       </li>
     
   </ul>
