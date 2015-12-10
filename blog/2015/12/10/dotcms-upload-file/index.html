@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>GCC and Make - My Octopress Blog</title>
+  <title>DotCMS使用中的问题 - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="&emsp;&emsp;GCC 开始是Gun C Complier，后来由于加入各种语言支持，能够编译java,c++等。慢慢演变为Gun Complier Collection。这节的内容包括Gcc介绍，Makefile介绍，GDB应用,Eclipse集成环境。 Gcc编译过程 *预处理：gcc &hellip;">
+  <meta name="description" content="DotCMS如何上传资源 dotcms 是一个Java开发的功能强大的内容管理系统(CMS)。开源且跨平台，速度和嵌入式脚本语言使dotCMS易于扩充和建构。因为dotCMS使用hibernate来抽象所有的数据访问，数据库移植很方便。目前支持dotCMS数据库,包括:Oracle， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://musicpop.github.io/blog/2014/09/17/gcc-and-make">
+  <link rel="canonical" href="http://musicpop.github.io/blog/2015/12/10/dotcms-upload-file">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -66,7 +66,7 @@
   
   <header>
     
-      <h1 class="entry-title">GCC and Make</h1>
+      <h1 class="entry-title">DotCMS使用中的问题</h1>
     
     
       <p class="meta">
@@ -75,76 +75,28 @@
 
 
 
-<time class='entry-date' datetime='2014-09-17T16:10:27+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:10 pm</span></time>
+<time class='entry-date' datetime='2015-12-10T09:55:11+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:55 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>&emsp;&emsp;GCC 开始是Gun C Complier，后来由于加入各种语言支持，能够编译java,c++等。慢慢演变为Gun Complier Collection。这节的内容包括Gcc介绍，Makefile介绍，GDB应用,Eclipse集成环境。</p>
+<div class="entry-content"><h2>DotCMS如何上传资源</h2>
 
-<h2>Gcc编译过程</h2>
+<p>dotcms 是一个Java开发的功能强大的内容管理系统(CMS)。开源且跨平台，速度和嵌入式脚本语言使dotCMS易于扩充和建构。因为dotCMS使用hibernate来抽象所有的数据访问，数据库移植很方便。目前支持dotCMS数据库,包括:Oracle，PostgreSQL，Microsoft SQL Server，MySQL。dotCMS是一个可扩展的网页内容管理平台。</p>
 
-<p>*预处理：gcc -E main.c -o main.i</p>
+<p>在使用的过程中，需要上传资源到后台，根据其文档，我使用了cyberduck工具，<a href="https://cyberduck.io/">https://cyberduck.io/</a></p>
 
-<p>*编译  ：gcc -S main.i -o main.s</p>
+<p>新建链接时，端口设置、路径设置都需要正确才可以，见下图：</p>
 
-<p>*汇编  ：gcc -c main.s -o main.o</p>
+<p><img src="images/dotcms1.png" alt="小黄鸭" /></p>
 
-<p>*链接  ：gcc main.o -o main</p>
+<h2>在一次修改代码后，突然出现了下图的错误</h2>
 
-<h2>调试</h2>
+<p><img src="images/dotcms-wenti.png" alt="小黄鸭" /></p>
 
-<p>*编译文件并加入调试信息 gcc -O crash.c -o crash</p>
-
-<p>*使用gdb调试 gdb crash</p>
-
-<p>*加入断点 b 3</p>
-
-<p>*开始调试 run</p>
-
-<p>next 执行一行源码但不进入函数内部</p>
-
-<p>step 执行一行源码且进入函数内部</p>
-
-<p>continue 继续执行</p>
-
-<p>quit 终止</p>
-
-<h2>GCC编译过程中需要的库依赖</h2>
-
-<p>-头文件
-    搜索的路径包括：C_INCLUDE_PATH  CPLUS_INCLUDE_PATH OBJ_INCLUDE_PATH</p>
-
-<pre><code>通过-l选项添加搜索目录
-</code></pre>
-
-<p>-静态库</p>
-
-<pre><code>通过-L选项添加搜索目录
-
-使用环境变量LD_LIBRARY_PATH
-</code></pre>
-
-<p>-动态库</p>
-
-<pre><code>a.把库拷贝到/usr/lib，/lib，/usr/local/lib目录下
-
-b.添加库路径到LD_LIBRARY_PATH
-
-c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，并执行ldconfig刷新
-</code></pre>
-
-<h2>如何生成动态库</h2>
-
-<p>*gcc -c main.c xiangjia.c xiangjian.c   生成.o文件</p>
-
-<p>*此时执行gcc main.o -o main会出错，提示没有定义xiangjia 和 xiangjian</p>
-
-<p>*ar cr libmath56.a xiangjia.o xiangjian.o 此时生成.a文件</p>
-
-<p>*gcc main.o -o main libmath56.a 这个时候运行成功，生成main文件</p>
+<p>原来是将velocity模板的‘#‘号符，写在了html的注释里面，本想将其注释掉，但是velocity会先进行解析，解析&#8217;#&lsquo;号符时，自然也就出错了。</p>
 </div>
 
 
@@ -160,7 +112,7 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
 
 
 
-<time class='entry-date' datetime='2014-09-17T16:10:27+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:10 pm</span></time>
+<time class='entry-date' datetime='2015-12-10T09:55:11+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:55 am</span></time>
       
 
 
@@ -175,10 +127,8 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/09/15/my-first-octopress-blog/" title="Previous Post: 第一篇博客">&laquo; 第一篇博客</a>
+        <a class="basic-alignment left" href="/blog/2015/12/09/vertica-1/" title="Previous Post: Vertica 大数据">&laquo; Vertica 大数据</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/17/gen-ju-duan-kou-hao-cha-zhao-jin-cheng/" title="Next Post: 根据端口号查找进程">根据端口号查找进程 &raquo;</a>
       
     </p>
   </footer>

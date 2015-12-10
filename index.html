@@ -9,7 +9,7 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="Vertica 大数据 列式存储 HP Vertica 存储数据的方式极大的提升了查询的效能。因为它可以极大地减少磁盘i/o ，列存储是读密集型工作负载的理想选择。 列存储架构中的 FlexStore 传统数据库被用来 OLTP查询和行存储架构.为了处理一个查询, 行存储区读取指定的表中的所有列 &hellip;">
+  <meta name="description" content="DotCMS如何上传资源 dotcms 是一个Java开发的功能强大的内容管理系统(CMS)。开源且跨平台，速度和嵌入式脚本语言使dotCMS易于扩充和建构。因为dotCMS使用hibernate来抽象所有的数据访问，数据库移植很方便。目前支持dotCMS数据库,包括:Oracle， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,7 +23,7 @@
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
@@ -69,7 +69,50 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/12/09/vertica-1/">Vertica 1</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/12/10/dotcms-upload-file/">DotCMS使用中的问题</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-10T09:55:11+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:55 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>DotCMS如何上传资源</h2>
+
+<p>dotcms 是一个Java开发的功能强大的内容管理系统(CMS)。开源且跨平台，速度和嵌入式脚本语言使dotCMS易于扩充和建构。因为dotCMS使用hibernate来抽象所有的数据访问，数据库移植很方便。目前支持dotCMS数据库,包括:Oracle，PostgreSQL，Microsoft SQL Server，MySQL。dotCMS是一个可扩展的网页内容管理平台。</p>
+
+<p>在使用的过程中，需要上传资源到后台，根据其文档，我使用了cyberduck工具，<a href="https://cyberduck.io/">https://cyberduck.io/</a></p>
+
+<p>新建链接时，端口设置、路径设置都需要正确才可以，见下图：</p>
+
+<p><img src="images/dotcms1.png" alt="小黄鸭" /></p>
+
+<h2>在一次修改代码后，突然出现了下图的错误</h2>
+
+<p><img src="images/dotcms-wenti.png" alt="小黄鸭" /></p>
+
+<p>原来是将velocity模板的‘#‘号符，写在了html的注释里面，本想将其注释掉，但是velocity会先进行解析，解析&#8217;#&lsquo;号符时，自然也就出错了。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/09/vertica-1/">Vertica 大数据</a></h1>
     
     
       <p class="meta">
@@ -85,12 +128,13 @@
   </header>
 
 
-  <div class="entry-content"><h1>Vertica 大数据</h1>
+  <div class="entry-content"><p>【版权所有，禁止转载】</p>
 
-<h1>列式存储</h1>
+<h2>列式存储</h2>
 
-<p>HP Vertica 存储数据的方式极大的提升了查询的效能。因为它可以极大地减少磁盘i/o ，列存储是读密集型工作负载的理想选择。
-<img src="images/columnStore.png" alt="列存储" /></p>
+<p>HP Vertica 存储数据的方式极大的提升了查询的效能。因为它可以极大地减少磁盘i/o ，列存储是读密集型工作负载的理想选择。</p>
+
+<p><img src="images/columnStore.png" alt="列存储" /></p>
 
 <h3>列存储架构中的 FlexStore</h3>
 
@@ -177,6 +221,120 @@ FROM Table1 JOIN Table2 ON H = J;
 
 <p>K-Safety案例
 <img src="images/ksf1.png" alt="压缩" /></p>
+
+<p>上面的图显示了 一级K-safety 5 节点群集。每个节点使用 buddy projections为下一个节点中存储的数据  (节点 1 有节点 2 的buddy projections，节点 2 有节点 3的buddy projections，等等)。任何群集中的节点可能失败，并且数据库将仍然能够继续运行 (虽然以较低的性能，其中一个节点由于要处理自己的工作负载和故障节点的工作量)。</p>
+
+<p><img src="images/ksf2.png" alt="压缩" /></p>
+
+<p>如果节点 2 出现故障，节点 1 使用其副本节点 2 的数据，并执行其本身的作用. 数据库容错能力将下降从 1 到 0，因为单个节点可能会导致数据库变得不安全. 在此示例中，如果节点 1 或节点 3 出现故障，数据库会变得不安全，因为并不是所有的数据将可用。如果节点 1 出现故障，然后节点 2 的数据将不再可用。如果节点 3 出现故障，它的数据将不再可用，因为节点 2 已经不可用. 在这种情况下，节点 1 和 3 是关键节点。在 K-安全等级为 1 的数据库中，包含失败的节点的buddy projection和其buddy projection在失败节点的节点将始终成为关键节点。
+<img src="images/ksf3.png" alt="压缩" />
+在节点 2 失效下，节点 4 或 5 群集中的可能会失败，数据库会还有所有可用数据。例如，如果节点 4 失败，节点 3 是能够使用其好友预测填写为它. 在此情况下，节点任何进一步失败将导致关闭数据库，因为所有的群集中的节点都现在是关键节点。 (另外，如果更多的一个节点发生故障，一半或更多的节点将失效，需要 HP Vertica 自动关闭，无论如果所有的数据都可用，或不可用.)</p>
+
+<p><img src="images/ksf4.png" alt="压缩" /></p>
+
+<p>在 K-safety 级别为 2 的数据库中, node 2失败后，任何其他节点还可以失败，数据库将能够继续运行. 例如，如果在 5 个节点的群集中的每个节点包含其邻居 (例如，节点 1 所载节点 5 和节点 2  的buddy projections  )，那么节点 2 和 3 如同时失败，数据库可以继续运行. Node 1 能作为 node 2的备份, and node 4 能作为 node 3 的备份. 由于要求，一半或更多节点群集中的不可用时数据库不能继续运行，如果节点 5 出现故障，即使节点 1 和 4 有数据的buddy projections，集群也不能继续运行。</p>
+
+<h3>K-Safety 要求</h3>
+
+<p>你的数据库必须有最低数量的节点能够有 K-安全级别大于零，如下表中所示.:</p>
+
+<table>
+<thead>
+<tr>
+<th> K-level&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;-</th>
+<th style="text-align:center;"> Number of Nodes Required   </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 0              </td>
+<td style="text-align:center;"> 1+                             </td>
+</tr>
+<tr>
+<td> 1              </td>
+<td style="text-align:center;"> 3+                             </td>
+</tr>
+<tr>
+<td> 2              </td>
+<td style="text-align:center;"> 5+                             </td>
+</tr>
+<tr>
+<td> k              </td>
+<td style="text-align:center;"> 2k+1                               </td>
+</tr>
+</tbody>
+</table>
+
+
+<p>HP Vertica 不支持 K值 大于2</p>
+
+<h2>Hybrid 存储模型</h2>
+
+<p>了支持数据操作(DML)命令 (INSERT, UPDATE, and DELETE) and 批量加载操作 (COPY命令), 或者在一个混合使用这两种操作的数据仓库工作负荷中, HP Vertica 实现的存储模型如下图所示. 这个模型 在每个 HP Vertica 节点中是一样的.</p>
+
+<p><img src="images/hybrid.png" alt="Hybrid 存储模型" /></p>
+
+<p>Write Optimized Store (WOS) 是驻留在内存中数据结构用于存储插入、 更新、 删除和复制 (离不开直接提示) 动作. 就像 Read Optimized Store (ROS), the WOS 由 projection安排. 为了支持非常快的数据加载速度，wos存储无数据压缩或索引的记录。 在 WOS中的 projection 只有当查询的时候排序，只要没有进一步的数据插入到它，它一直是排序的.</p>
+
+<p>The Tuple Mover &trade; 是 HP Vertica 数据库优化组件：其 移动数据从WOS到ROS. The TM also 联合小的 ROS 容器到一个大的容器, 并清理删除的数据. 在操作期间，TM 也是负责处于存储位置的存储策略.</p>
+
+<p>The Read Optimized Store (ROS) 是高度优化、 面向读磁盘的存储结构，组织的投影。 The ROS 大量使用了压缩和索引. 你能够使用 COPY&hellip;DIRECT and INSERT (with /<em>+direct</em>/ hint)语句直接加载数据到 ROS.</p>
+
+<h2>物理架构</h2>
+
+<p>在传统数据库中，数据被保存在表中, 使用索引和物化视图等结构 用来提高查询性能. 对比来说, HP Vertica中tables不占用任何存储空间. 替代的是 由表中列的集合（projections）组成。</p>
+
+<p>使用 projections 带来如下的好处:</p>
+
+<p>l  Projections压缩和编码数据，大大减少存储数据所需的空间.此外
+HP Vertica 对编码的数据操作尽可能避免解码的成本。这种组合（压缩和编码）下查询性能最大化的同时优化磁盘空间.</p>
+
+<p>l 可以根据Projections的大小进行分段或复制整个数据库节点. 比如, 对于大表的Projections可以分割和分布在所有节点. 对于小表的未分段的Projections可以在数据库中的所有节点间复制.</p>
+
+<p>l  Projections对 SQL 的最终用户是透明的. The HP Vertica 查询优化器自动选择最优的Projections.</p>
+
+<p>l Projections此外提供了高可用性和恢复性. 为了保证高可用性和恢复性, HP Vertica在至少 K + 1 群集中的节点上重复表的列数据. 然而,如果在 K-Safe 环境中一个机器失效, 数据库可以继续运行并使用其余节点上重复数据. 一旦该节点恢复正常运作，它通过查询其他节点自动将恢复其数据和丢失的东西。</p>
+
+<h3>Projection概念</h3>
+
+<p>对于数据库中的每一个表, HP Vertica 需要至少一个projection, 该projection叫做 superprojection. superprojection是针对于一个表的，并包含该表的所有列。这样, HP Vertica 保证所有的SQL查询都能够被应答.
+除了 superprojections，您可以通过创建包含表中的部分列的projection，通过一个或多个projection优化您的查询。这些projection被称为查询具体的projection。</p>
+
+<h3>使用Projections保持高可用</h3>
+
+<p> | 复制小的, 未分割的 projections</p>
+
+<p>|  对大的、分割的projections创建 buddy projections</p>
+
+<h4>Replication (Unsegmented Projections)</h4>
+
+<p>当创建 projections时, 对它们进行复制，创建和存储在数据库中的所有节点上重复这些projections.</p>
+
+<p>下图演示了两个projections, B 和 C, 被复制到三个节点.</p>
+
+<p><img src="images/projection1.png" alt="投影" /></p>
+
+<h4>Buddy Projections (分割的 Projections)</h4>
+
+<p>HP Vertica 创建 buddy projections, 它们是segmented projections 的拷贝，分布在所有节点。 确保  包含相同数据的段被分配在不同的节点. 这意味着如何一个节点失败,所有的数据在其他节点可恢复. HP Vertica使用offsets分布段到不同的节点. 例如，包括第一好友投影 (A_BP1) 距离投影A一个节点和从第二个好友投影 (A_BP2) 段距离投影A两个节点。</p>
+
+<p>下图演示了分割的 projection  A 及其buddy projections, A_BP1 and A_BP2, 分布在三个节点上.
+<img src="images/projection2.png" alt="投影" /></p>
+
+<p>下面的插图显示 HP Vertica 如何使用偏移量来确保每个节点都有一套完整的数据的投影
+<img src="images/projection3.png" alt="投影" /></p>
+
+<p>此示例阐释如何一个投影和跨节点分割其好友投影。然而，每个节点可以存储从各种投影线段的集合。</p>
+
+<h4>Projections如何被创建</h4>
+
+<p>Vertica 建议加载您的数据的示例，然后运行数据库设计器来创建优化的projection。数据库设计器创建新的projection，以基于其数据统计和查询优化您的数据库. 创建的步骤:</p>
+
+<ol>
+<li><p>分析您的逻辑架构、 示例数据和示例查询(可选的)</p></li>
+<li><p>以SQL脚本的形式，创建一个物理架构设计 (投影)，并可以自动或手动部署</p></li>
+</ol>
+
 </div>
   
   
@@ -819,36 +977,9 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/13/title/">Title</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-13T02:38:39+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>2:38 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/2">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -861,7 +992,11 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/blog/2015/12/09/vertica-1/">Vertica 1</a>
+        <a href="/blog/2015/12/10/dotcms-upload-file/">DotCMS使用中的问题</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/12/09/vertica-1/">Vertica 大数据</a>
       </li>
     
       <li class="post">
@@ -874,10 +1009,6 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
     
       <li class="post">
         <a href="/blog/2015/06/10/maven/">Maven</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/08/spring-boot/">Spring-boot</a>
       </li>
     
   </ul>
