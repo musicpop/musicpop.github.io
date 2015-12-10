@@ -1,15 +1,16 @@
 ---
 layout: post
-title: "Vertica 1"
+title: "Vertica 大数据"
 date: 2015-12-09 15:19:40 +0800
 comments: true
 categories: 
 ---
-Vertica 大数据
-==========================
-#列式存储
+ 
+【版权所有，禁止转载】
+##列式存储
 
 HP Vertica 存储数据的方式极大的提升了查询的效能。因为它可以极大地减少磁盘i/o ，列存储是读密集型工作负载的理想选择。
+
 ![列存储](images/columnStore.png)
 
 ###列存储架构中的 FlexStore
@@ -91,8 +92,95 @@ HP Vertica 数据库有可能在 超过K 节点失败的情况下运行. 因为�
 K-Safety案例
 ![压缩](images/ksf1.png)
 
+上面的图显示了 一级K-safety 5 节点群集。每个节点使用 buddy projections为下一个节点中存储的数据  (节点 1 有节点 2 的buddy projections，节点 2 有节点 3的buddy projections，等等)。任何群集中的节点可能失败，并且数据库将仍然能够继续运行 (虽然以较低的性能，其中一个节点由于要处理自己的工作负载和故障节点的工作量)。 
+
+![压缩](images/ksf2.png)
+
+如果节点 2 出现故障，节点 1 使用其副本节点 2 的数据，并执行其本身的作用. 数据库容错能力将下降从 1 到 0，因为单个节点可能会导致数据库变得不安全. 在此示例中，如果节点 1 或节点 3 出现故障，数据库会变得不安全，因为并不是所有的数据将可用。如果节点 1 出现故障，然后节点 2 的数据将不再可用。如果节点 3 出现故障，它的数据将不再可用，因为节点 2 已经不可用. 在这种情况下，节点 1 和 3 是关键节点。在 K-安全等级为 1 的数据库中，包含失败的节点的buddy projection和其buddy projection在失败节点的节点将始终成为关键节点。 
+![压缩](images/ksf3.png)
+在节点 2 失效下，节点 4 或 5 群集中的可能会失败，数据库会还有所有可用数据。例如，如果节点 4 失败，节点 3 是能够使用其好友预测填写为它. 在此情况下，节点任何进一步失败将导致关闭数据库，因为所有的群集中的节点都现在是关键节点。 (另外，如果更多的一个节点发生故障，一半或更多的节点将失效，需要 HP Vertica 自动关闭，无论如果所有的数据都可用，或不可用.)
+
+![压缩](images/ksf4.png)
+
+在 K-safety 级别为 2 的数据库中, node 2失败后，任何其他节点还可以失败，数据库将能够继续运行. 例如，如果在 5 个节点的群集中的每个节点包含其邻居 (例如，节点 1 所载节点 5 和节点 2  的buddy projections  )，那么节点 2 和 3 如同时失败，数据库可以继续运行. Node 1 能作为 node 2的备份, and node 4 能作为 node 3 的备份. 由于要求，一半或更多节点群集中的不可用时数据库不能继续运行，如果节点 5 出现故障，即使节点 1 和 4 有数据的buddy projections，集群也不能继续运行。 
+
+###K-Safety 要求
+
+你的数据库必须有最低数量的节点能够有 K-安全级别大于零，如下表中所示.:
+ 
+
+| K-level-------------------------| Number of Nodes Required   |
+| -------------------------- |:--------------------------:|
+| 0              | 1\+							   |
+| 1              | 3\+							   |
+| 2              | 5\+							   |
+| k              | 2k\+1							   |
+
+HP Vertica 不支持 K值 大于2
+
+##Hybrid 存储模型
+
+了支持数据操作(DML)命令 (INSERT, UPDATE, and DELETE) and 批量加载操作 (COPY命令), 或者在一个混合使用这两种操作的数据仓库工作负荷中, HP Vertica 实现的存储模型如下图所示. 这个模型 在每个 HP Vertica 节点中是一样的.
+
+![Hybrid 存储模型](images/hybrid.png)
+
+Write Optimized Store (WOS) 是驻留在内存中数据结构用于存储插入、 更新、 删除和复制 (离不开直接提示) 动作. 就像 Read Optimized Store (ROS), the WOS 由 projection安排. 为了支持非常快的数据加载速度，wos存储无数据压缩或索引的记录。 在 WOS中的 projection 只有当查询的时候排序，只要没有进一步的数据插入到它，它一直是排序的. 
+
+The Tuple Mover (TM) 是 HP Vertica 数据库优化组件：其 移动数据从WOS到ROS. The TM also 联合小的 ROS 容器到一个大的容器, 并清理删除的数据. 在操作期间，TM 也是负责处于存储位置的存储策略. 
+
+The Read Optimized Store (ROS) 是高度优化、 面向读磁盘的存储结构，组织的投影。 The ROS 大量使用了压缩和索引. 你能够使用 COPY...DIRECT and INSERT (with /*+direct*/ hint)语句直接加载数据到 ROS.
 
 
+##物理架构
+
+在传统数据库中，数据被保存在表中, 使用索引和物化视图等结构 用来提高查询性能. 对比来说, HP Vertica中tables不占用任何存储空间. 替代的是 由表中列的集合（projections）组成。
+
+使用 projections 带来如下的好处:
+
+l  Projections压缩和编码数据，大大减少存储数据所需的空间.此外
+HP Vertica 对编码的数据操作尽可能避免解码的成本。这种组合（压缩和编码）下查询性能最大化的同时优化磁盘空间.  
+
+l 可以根据Projections的大小进行分段或复制整个数据库节点. 比如, 对于大表的Projections可以分割和分布在所有节点. 对于小表的未分段的Projections可以在数据库中的所有节点间复制. 
+
+l  Projections对 SQL 的最终用户是透明的. The HP Vertica 查询优化器自动选择最优的Projections.
+ 
+l Projections此外提供了高可用性和恢复性. 为了保证高可用性和恢复性, HP Vertica在至少 K + 1 群集中的节点上重复表的列数据. 然而,如果在 K-Safe 环境中一个机器失效, 数据库可以继续运行并使用其余节点上重复数据. 一旦该节点恢复正常运作，它通过查询其他节点自动将恢复其数据和丢失的东西。
+
+
+###Projection概念
+对于数据库中的每一个表, HP Vertica 需要至少一个projection, 该projection叫做 superprojection. superprojection是针对于一个表的，并包含该表的所有列。这样, HP Vertica 保证所有的SQL查询都能够被应答.
+除了 superprojections，您可以通过创建包含表中的部分列的projection，通过一个或多个projection优化您的查询。这些projection被称为查询具体的projection。
+###使用Projections保持高可用
+ | 复制小的, 未分割的 projections
+
+|  对大的、分割的projections创建 buddy projections
+
+####Replication (Unsegmented Projections)
+当创建 projections时, 对它们进行复制，创建和存储在数据库中的所有节点上重复这些projections.
+
+下图演示了两个projections, B 和 C, 被复制到三个节点.
+
+![投影](images/projection1.png)
+
+####Buddy Projections (分割的 Projections)
+
+HP Vertica 创建 buddy projections, 它们是segmented projections 的拷贝，分布在所有节点。 确保  包含相同数据的段被分配在不同的节点. 这意味着如何一个节点失败,所有的数据在其他节点可恢复. HP Vertica使用offsets分布段到不同的节点. 例如，包括第一好友投影 (A_BP1) 距离投影A一个节点和从第二个好友投影 (A_BP2) 段距离投影A两个节点。
+
+下图演示了分割的 projection  A 及其buddy projections, A_BP1 and A_BP2, 分布在三个节点上.
+![投影](images/projection2.png)
+
+下面的插图显示 HP Vertica 如何使用偏移量来确保每个节点都有一套完整的数据的投影
+![投影](images/projection3.png)
+
+此示例阐释如何一个投影和跨节点分割其好友投影。然而，每个节点可以存储从各种投影线段的集合。
+
+####Projections如何被创建
+
+Vertica 建议加载您的数据的示例，然后运行数据库设计器来创建优化的projection。数据库设计器创建新的projection，以基于其数据统计和查询优化您的数据库. 创建的步骤:
+
+1.	分析您的逻辑架构、 示例数据和示例查询(可选的)
+
+2.	以SQL脚本的形式，创建一个物理架构设计 (投影)，并可以自动或手动部署
 
 
 
