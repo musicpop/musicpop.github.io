@@ -5,17 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Maven - My Octopress Blog</title>
+  <title>Dotcms数据-迁移服务器 - My Octopress Blog</title>
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="Maven笔记：
-一， 主要命令
-a) Mvn clean compile
-b) Mvn clean test
-c) Mvn clean package
-d) Mvn clean install
-执行test前会执行compile，执行package前会执行test， &hellip;">
+  <meta name="description" content="导出本地数据库 将数据导入部署机器 数据库 引用要导入的目标数据库 (use temp_test_db) 数据库temp_test_db数据库必须存在。
+导入命令
+source 数据文件目录(source E:\data.sql)
+需要一定时间，和导入文件大小相关 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +21,7 @@ d) Mvn clean install
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://musicpop.github.io/blog/2015/06/10/maven">
+  <link rel="canonical" href="http://musicpop.github.io/blog/2015/12/11/dotcms-deploy">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
@@ -72,7 +69,7 @@ d) Mvn clean install
   
   <header>
     
-      <h1 class="entry-title">Maven</h1>
+      <h1 class="entry-title">Dotcms数据-迁移服务器</h1>
     
     
       <p class="meta">
@@ -81,30 +78,37 @@ d) Mvn clean install
 
 
 
-<time class='entry-date' datetime='2015-06-10T08:32:11+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:32 am</span></time>
+<time class='entry-date' datetime='2015-12-11T18:11:07+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:11 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Maven笔记：
-一，  主要命令
-a)  Mvn clean compile
-b)  Mvn clean test
-c)  Mvn clean package
-d)  Mvn clean install
-执行test前会执行compile，执行package前会执行test，执行install前会执行package
-二，  安装时compiler can not be resolved
-因为公司里使用代理上网，配置maven的conf\setting添加
-<proxy>
-      <id>optional</id>
-      <active>true</active>
-      <protocol>http</protocol>
-      <host>proxy1.sg.*.com</host>
-      <port>81</port>
-      <nonProxyHosts>local.net|some.host.com</nonProxyHosts>
-    </proxy></p>
+<div class="entry-content"><h2>导出本地数据库</h2>
+
+<p><img src="images/dotcms-deploy.png" alt="导出" /></p>
+
+<h2>将数据导入部署机器 数据库</h2>
+
+<p>引用要导入的目标数据库
+    (use temp_test_db)</p>
+
+<p>数据库temp_test_db数据库必须存在。
+导入命令
+source 数据文件目录(source E:\data.sql)
+需要一定时间，和导入文件大小相关</p>
+
+<h2>将代码部署到服务器Tomcat目录ROOT目录下</h2>
+
+<h2>修改 ROOT/Meta-info/context.xml 中的连接数据库的用户名及密码</h2>
+
+<h2>如果启动的时候提示分配的内存不足，可以创建setenv.bat文件，输入</h2>
+
+<pre><code>set JAVA_OPTS=-Dfile.encoding=UTF-8 -Xms128m -Xmx1024m
+</code></pre>
+
+<p>将这个文件保存在Tomcat bin目录下。这里没有设置 -XX:MaxPermSize，因为在新版本的java中已经移除了此设置。</p>
 </div>
 
 
@@ -120,7 +124,7 @@ d)  Mvn clean install
 
 
 
-<time class='entry-date' datetime='2015-06-10T08:32:11+08:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:32 am</span></time>
+<time class='entry-date' datetime='2015-12-11T18:11:07+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:11 pm</span></time>
       
 
 
@@ -135,10 +139,8 @@ d)  Mvn clean install
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/06/08/spring-boot/" title="Previous Post: spring-boot">&laquo; spring-boot</a>
+        <a class="basic-alignment left" href="/blog/2015/12/10/dotcms-upload-file/" title="Previous Post: DotCMS使用中的问题">&laquo; DotCMS使用中的问题</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/08/18/idea-14-show-column-number-shortcutkey/" title="Next Post: idea-14-show-column-number-shortcutkey">idea-14-show-column-number-shortcutkey &raquo;</a>
       
     </p>
   </footer>

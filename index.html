@@ -9,7 +9,10 @@
   <meta name="author" content="Your Name">
 
   
-  <meta name="description" content="DotCMS如何上传资源 dotcms 是一个Java开发的功能强大的内容管理系统(CMS)。开源且跨平台，速度和嵌入式脚本语言使dotCMS易于扩充和建构。因为dotCMS使用hibernate来抽象所有的数据访问，数据库移植很方便。目前支持dotCMS数据库,包括:Oracle， &hellip;">
+  <meta name="description" content="导出本地数据库 将数据导入部署机器 数据库 引用要导入的目标数据库 (use temp_test_db) 数据库temp_test_db数据库必须存在。
+导入命令
+source 数据文件目录(source E:\data.sql)
+需要一定时间，和导入文件大小相关 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -63,6 +66,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/12/11/dotcms-deploy/">Dotcms数据-迁移服务器</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-12-11T18:11:07+08:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>导出本地数据库</h2>
+
+<p><img src="images/dotcms-deploy.png" alt="导出" /></p>
+
+<h2>将数据导入部署机器 数据库</h2>
+
+<p>引用要导入的目标数据库
+    (use temp_test_db)</p>
+
+<p>数据库temp_test_db数据库必须存在。
+导入命令
+source 数据文件目录(source E:\data.sql)
+需要一定时间，和导入文件大小相关</p>
+
+<h2>将代码部署到服务器Tomcat目录ROOT目录下</h2>
+
+<h2>修改 ROOT/Meta-info/context.xml 中的连接数据库的用户名及密码</h2>
+
+<h2>如果启动的时候提示分配的内存不足，可以创建setenv.bat文件，输入</h2>
+
+<pre><code>set JAVA_OPTS=-Dfile.encoding=UTF-8 -Xms128m -Xmx1024m
+</code></pre>
+
+<p>将这个文件保存在Tomcat bin目录下。这里没有设置 -XX:MaxPermSize，因为在新版本的java中已经移除了此设置。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -929,54 +984,6 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/15/my-first-octopress-blog/">第一篇博客</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-15T16:35:52+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:35 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>shell命令，kde，gnome</h1>
-
-<pre><code>&gt;引用蔡老师的话，首先要做人，技术只是吃饭的本领。
-</code></pre>
-
-<p>*shell命令行显示</p>
-
-<pre><code>'''[mysql@rh19 ~]$
-
-[root@rh19 root]#'''
-</code></pre>
-
-<p>*shell通配符</p>
-
-<pre><code>**
-
-*.
-
-*?
-</code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -992,6 +999,10 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/12/11/dotcms-deploy/">Dotcms数据-迁移服务器</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/12/10/dotcms-upload-file/">DotCMS使用中的问题</a>
       </li>
     
@@ -1005,10 +1016,6 @@ c.修改/etc/ld.so.conf文件，把库文件所在的目录放在文件末尾，
     
       <li class="post">
         <a href="/blog/2015/08/18/idea-14-show-column-number-shortcutkey/">Idea-14-show-column-number-shortcutkey</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/06/10/maven/">Maven</a>
       </li>
     
   </ul>
